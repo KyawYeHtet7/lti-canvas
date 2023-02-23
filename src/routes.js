@@ -21,8 +21,10 @@ router.post('/grade', async (req, res) => {
     // Selecting linetItem ID
     let lineItemId = idtoken.platformContext.endpoint.lineitem // Attempting to retrieve it from idtoken
     if (!lineItemId) {
-      console.log("inside if");
-      const response = await lti.Grade.getLineItems(idtoken, { resourceLinkId: true })
+      console.log('inside if')
+      const response = await lti.Grade.getLineItems(idtoken, {
+        resourceLinkId: true
+      })
       // console.log(response);
       const lineItems = response.lineItems
       if (lineItems.length === 0) {
@@ -32,20 +34,24 @@ router.post('/grade', async (req, res) => {
           scoreMaximum: 100,
           label: 'Grade',
           tag: 'grade',
-          resourceLinkId: idtoken.platformContext.resource.id,
+          resourceLinkId: idtoken.platformContext.resource.id
         }
-        console.log("lineItem");
+        console.log('lineItem')
         const lineItem = await lti.Grade.createLineItem(idtoken, newLineItem)
-        console.log(lineItem);
+        console.log(lineItem)
         // const lineItem = await lti.Grade.createLineItem(idtoken, newLineItem)
-        console.log("after creting lineItem");
+        console.log('after creting lineItem')
         lineItemId = lineItem.id
       } else lineItemId = lineItems[0].id
     }
-    console.log("before sending grade");
+    console.log('before sending grade')
 
     // Sending Grade
-    const responseGrade = await lti.Grade.submitScore(idtoken, lineItemId, gradeObj)
+    const responseGrade = await lti.Grade.submitScore(
+      idtoken,
+      lineItemId,
+      gradeObj
+    )
     return res.send(responseGrade)
   } catch (err) {
     console.log(err.message)
@@ -72,6 +78,7 @@ router.post('/deeplink', async (req, res) => {
 
     const items = {
       type: 'ltiResourceLink',
+      url: 'https://lti-canvas.onrender.com/checkAuth',
       title: 'Ltijs Demo',
       custom: {
         name: resource.name,
@@ -79,9 +86,23 @@ router.post('/deeplink', async (req, res) => {
       }
     }
 
-    const form = await lti.DeepLinking.createDeepLinkingForm(res.locals.token, items, { message: 'Successfully Registered' })
+    const form = await lti.DeepLinking.createDeepLinkingForm(
+      res.locals.token,
+      items,
+      { message: 'Successfully Registered' }
+    )
     if (form) return res.send(form)
     return res.sendStatus(500)
+  } catch (err) {
+    console.log(err.message)
+    return res.status(500).send(err.message)
+  }
+})
+
+router.get('/checkAuth', async (req, res) => {
+  try {
+    console.log('Req', req)
+    console.log('Res', res)
   } catch (err) {
     console.log(err.message)
     return res.status(500).send(err.message)
@@ -125,6 +146,8 @@ router.get('/info', async (req, res) => {
 })
 
 // Wildcard route to deal with redirecting to React routes
-router.get('*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))
+router.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, '../public/index.html'))
+)
 
 module.exports = router

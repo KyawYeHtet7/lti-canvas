@@ -77,7 +77,7 @@ router.post('/deeplink', async (req, res) => {
     const resource = req.body
 
     const items = {
-      type: 'link',
+      type: 'ltiResourceLink',
       url: 'https://lti-canvas.onrender.com/checkAuth',
       title: 'Ltijs Demo',
       custom: {

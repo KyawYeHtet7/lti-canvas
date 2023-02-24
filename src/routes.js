@@ -99,6 +99,16 @@ router.post('/deeplink', async (req, res) => {
   }
 })
 
+router.get('/checkAuth', async (req, res) => {
+  try {
+    console.log('CheckAuth Req', req)
+    console.log('CheckAuth Res', res)
+  } catch (err) {
+    console.log(err.message)
+    return res.status(500).send(err.message)
+  }
+})
+
 // Return available deep linking resources
 router.get('/resources', async (req, res) => {
   const resources = [

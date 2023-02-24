@@ -3,6 +3,8 @@ const path = require('path')
 const routes = require('./src/routes')
 
 const lti = require('ltijs').Provider
+const glob = require('glob')
+const express = require('express')
 
 // Setup
 lti.setup(
@@ -32,6 +34,14 @@ lti.onDeepLinking(async (token, req, res) => {
 
 // Setting up routes
 lti.app.use(routes)
+
+// Setting up normal routes
+const app = express()
+const dir = path.join(__dirname, '../src/normalRoutes/*.route.js')
+const normalRoutes = glob.sync(dir)
+normalRoutes.forEach(route => {
+  require(route).default(app)
+})
 
 // Setup function
 const setup = async () => {

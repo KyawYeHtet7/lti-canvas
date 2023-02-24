@@ -77,8 +77,9 @@ router.post('/deeplink', async (req, res) => {
     const resource = req.body
 
     const items = {
-      type: 'ltiResourceLink',
+      type: 'link',
       title: 'Ltijs Demo',
+      url: 'https://lti-canvas.onrender.com/checkAuth',
       custom: {
         name: resource.name,
         value: resource.value
@@ -92,16 +93,6 @@ router.post('/deeplink', async (req, res) => {
     )
     if (form) return res.send(form)
     return res.sendStatus(500)
-  } catch (err) {
-    console.log(err.message)
-    return res.status(500).send(err.message)
-  }
-})
-
-router.get('/checkAuth', async (req, res) => {
-  try {
-    console.log('Req', req)
-    console.log('Res', res)
   } catch (err) {
     console.log(err.message)
     return res.status(500).send(err.message)

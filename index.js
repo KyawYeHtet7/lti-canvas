@@ -6,7 +6,7 @@ const glob = require('glob')
 
 const setup = async () => {
   const app = express()
-  lti.setup('EXAMPLEKEY', {
+  lti.setup(process.env.LTI_KEY, {
     url: process.env.DB_HOST + '/' + process.env.DB_NAME + '?authSource=admin'
   })
 

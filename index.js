@@ -3,7 +3,6 @@ const lti = require('ltijs').Provider
 require('dotenv').config()
 const path = require('path')
 const glob = require('glob')
-const http = require('http')
 
 const setup = async () => {
   const app = express()
@@ -37,12 +36,9 @@ const setup = async () => {
     require(route)(app)
   })
 
-  return app
+  app.listen(process.env.PORT, () => {
+    console.log(`Server listening on port ${process.env.PORT}`)
+  })
 }
 
-const app = setup()
-const server = http.createServer(app)
-
-server.listen(process.env.PORT || 3000, () => {
-  console.log('Server listening on port 3000')
-})
+setup()

@@ -30,12 +30,11 @@ const setup = async () => {
   // Mount Ltijs express app into preexisting express app with /lti prefix
   app.use('/lti', lti.app)
 
-  const dir = path.join(__dirname, '../lti-canvas/src/routes.js')
-  console.log(dir)
-  const routes = glob.sync(dir)
+  const dir = path.join(__dirname, 'src/*.js')
+  const routes = glob.sync(dir.replace(/\\/g, '/'))
   routes.forEach(route => {
     console.log(route)
-    require(route).default(app)
+    require(route)(app)
   })
 
   return app

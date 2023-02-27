@@ -28,9 +28,7 @@ const setup = async () => {
 
   // When receiving deep linking request redirects to deep screen
   lti.onDeepLinking(async (token, req, res) => {
-    console.log('Token', token)
-    console.log('Req', req)
-    console.log('Res', res)
+    console.log('Deep linking request received')
     return lti.redirect(res, '/deeplink', { newResource: true })
   })
 

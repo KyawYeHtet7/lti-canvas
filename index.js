@@ -6,9 +6,20 @@ const glob = require('glob')
 
 const setup = async () => {
   const app = express()
-  lti.setup(process.env.LTI_KEY, {
-    url: process.env.DB_HOST + '/' + process.env.DB_NAME + '?authSource=admin'
-  })
+  lti.setup(
+    process.env.LTI_KEY,
+    {
+      url: process.env.DB_HOST + '/' + process.env.DB_NAME + '?authSource=admin'
+    },
+    {
+      staticPath: path.join(__dirname, './public'), // Path to static files
+      cookies: {
+        secure: true, // Set secure to true if the testing platform is in a different domain and https is being used
+        sameSite: 'None' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+      },
+      devMode: false // Set DevMode to true if the testing platform is in a different domain and https is not being used
+    }
+  )
 
   // When receiving successful LTI launch redirects to app
   lti.onConnect(async (token, req, res) => {
